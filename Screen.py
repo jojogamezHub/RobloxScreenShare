@@ -5,8 +5,6 @@ import cv2
 import os
 from gevent.pywsgi import WSGIServer
 
-OutboundIP = os.getenv("OutboundAddress")
-
 ####Settings####
 FPS = 1*8 #//Max FPS is FrameGroups * 8, due to max Roblox HTTP limit/or... we can change the fps to either half of the frame groups or double of the framegroups
 XRes = 16*25#//X resolution of your monitor, currently it is 16*N due to my aspect ratio
@@ -144,7 +142,7 @@ def ReturnFrame():
 
 def StartApi(Port):
     print(str(XRes) + "x" + str(YRes) + "    FPS: " + str(FPS)  + "    Port: " + str(Port))
-    Server = WSGIServer((OutboundIP, Port), app)
+    Server = WSGIServer(('0.0.0.0', Port), app)
     Server.serve_forever()
 
 StartApi(1241)
