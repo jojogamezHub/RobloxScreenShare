@@ -5,7 +5,7 @@ import cv2
 from gevent.pywsgi import WSGIServer
 
 ####Settings####
-FPS = 3*8 #//Max FPS is FrameGroups * 8, due to max Roblox HTTP limit/or... we can change the fps to either half of the frame groups or double of the framegroups
+FPS = 1*8 #//Max FPS is FrameGroups * 8, due to max Roblox HTTP limit/or... we can change the fps to either half of the frame groups or double of the framegroups
 XRes = 16*25#//X resolution of your monitor, currently it is 16*N due to my aspect ratio
 YRes = 9*25#//Y resolution of your monitor, currently it is 9*N due to my aspect ratio
 
@@ -16,7 +16,7 @@ FrameSkip = 0 #How many times it should send a full frame without compression, (
 
 FrameStart = 0 #//Starting Frame of the Video
 VideoStreaming = False#//Self explanatory,
-VideoPath = r"mp4 video path here"
+VideoPath = r"https://github.com/jojogamezHub/RobloxScreenShare/raw/main/video.mp4"
 ####Settings####
 
 app = Flask(__name__)
@@ -113,27 +113,31 @@ def EncodeFrame(FirstTime,ServerID,SkipFrame):
     
     return tuple(filter(None, CurrentFrame))
 
-@app.route('/',methods=['POST'])
+@app.route('/', methods=['POST'])
 def ReturnFrame():
     Method = request.headers["R"]
-    
     ServerID = request.headers["I"]
     SkipFrame = request.headers["F"]
 
     if not ServerID in ServerList:
         ServerList[ServerID] = FrameStart
-    
-    Frames = []
-    for _ in range(FrameGroups):
-        #makes the frames "flow" smoother, by keeping track of how much time was spent on encoding the frame and then subtracting it from the FPS time sleep         
-        start = time.time()
-        Frames.append(EncodeFrame(Method,ServerID,SkipFrame))
-        WaitOffset = time.time()-start
-        
-        time.sleep(max(0, 1/FPS - WaitOffset))
 
-    
-    return jsonify(Fr=Frames,F=FPS,X=XRes, Y=YRes, G=FrameGroups)
+    # Determine the range of frames to send based on FrameGroups
+    start_frame = ServerList[ServerID]
+    end_frame = start_frame + FrameGroups
+
+    Frames = []
+    for _ in range(start_frame, end_frame):
+        # makes the frames "flow" smoother, by keeping track of how much time was spent on encoding the frame and then subtracting it from the FPS time sleep
+        start = time.time()
+        Frames.append(EncodeFrame(Method, ServerID, SkipFrame))
+        WaitOffset = time.time() - start
+        time.sleep(max(0, 1 / FPS - WaitOffset))
+
+    # Update the frame count for the next request
+    ServerList[ServerID] = end_frame
+
+    return jsonify(Fr=Frames, F=FPS, X=XRes, Y=YRes, G=FrameGroups)
 
 def StartApi(Port):
     print(str(XRes) + "x" + str(YRes) + "    FPS: " + str(FPS)  + "    Port: " + str(Port))
