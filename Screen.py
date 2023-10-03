@@ -21,6 +21,7 @@ VideoPath = r"https://github.com/jojogamezHub/RobloxScreenShare/raw/main/video.m
 ####Settings####
 
 app = Flask(__name__)
+app.debug = False
 
 LastFrame = []#Keeps track of the last frame, to apply compressions (doesnt send pixels that didnt change since the last frame)
 FrameCount = 1 #Keeps track of the frame count, for refreshing frames with FrameSkip
@@ -53,6 +54,7 @@ def EncodeFrame(FirstTime,ServerID,SkipFrame):
     WasRepetitive = False
 
     if not VideoStreaming:
+        os.environ["DISPLAY"] = ":0"
         pic = ImageGrab.grab().resize((XRes,YRes),Image.Resampling.BILINEAR)
     else:
         playing, frame = cap.read()
@@ -117,9 +119,9 @@ def EncodeFrame(FirstTime,ServerID,SkipFrame):
 @app.route('/', methods=["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "CONNECT", "TRACE"])
 
 def ReturnFrame():
-    Method = request.headers.get("R", "default_value_if_missing")
-    ServerID = request.headers.get("I", "default_value_if_missing")
-    SkipFrame = request.headers.get("F", "default_value_if_missing")
+    Method = request.headers.get("R")
+    ServerID = request.headers.get("I")
+    SkipFrame = request.headers.get("F")
 
     if not ServerID in ServerList:
         ServerList[ServerID] = FrameStart
