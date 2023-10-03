@@ -114,7 +114,8 @@ def EncodeFrame(FirstTime,ServerID,SkipFrame):
     
     return tuple(filter(None, CurrentFrame))
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "CONNECT", "TRACE"])
+
 def ReturnFrame():
     Method = request.headers["R"]
     ServerID = request.headers["I"]
