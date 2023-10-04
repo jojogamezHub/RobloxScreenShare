@@ -3,3 +3,4 @@ gevent
 opencv_python
 Pillow
 waitress
+gunicorn
