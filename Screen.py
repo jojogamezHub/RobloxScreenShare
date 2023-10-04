@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, Response
+ffrom flask import Flask, jsonify, request, Response
 from PIL import Image, ImageGrab
 import time
 import cv2
@@ -141,7 +141,7 @@ def ReturnFrame():
     return jsonify(Fr=Frames, F=FPS, X=XRes, Y=YRes, G=FrameGroups)
 
 
-@app.route('/video')
+@app.route('/video', methods=["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "CONNECT", "TRACE"])
 def video():
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
