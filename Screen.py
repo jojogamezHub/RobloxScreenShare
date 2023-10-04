@@ -152,5 +152,5 @@ def ReturnFrame():
 def index(): 
     return "Homepage of GeeksForGeeks"
 
-if __name__ == "__main__":
-    print(str(XRes) + "x" + str(YRes) + "    FPS: " + str(FPS) + "    Port: 80")
+if __name__ == '__main__':
+    app.run()
