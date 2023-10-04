@@ -1,6 +1,7 @@
 Flask
 gevent
 opencv_python
+opencv-python-headless
 Pillow
 waitress
 gunicorn
