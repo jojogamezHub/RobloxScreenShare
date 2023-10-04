@@ -143,9 +143,4 @@ def ReturnFrame():
 
     return jsonify(Fr=Frames, F=FPS, X=XRes, Y=YRes, G=FrameGroups)
 
-def StartApi(Port):
-    print(str(XRes) + "x" + str(YRes) + "    FPS: " + str(FPS)  + "    Port: " + str(Port))
-    Server = WSGIServer(('0.0.0.0', Port), app)
-    Server.serve_forever()
-
-StartApi(1241)
+app.run(host='0.0.0.0',port='1241',debug=False)
