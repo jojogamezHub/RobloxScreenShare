@@ -16,7 +16,7 @@ FrameGroups = 6 #//Amount of Frames sent in Groups
 FrameSkip = 0 #How many times it should send a full frame without compression, (artifacts may appear with the compression, so this clears them up at the cost of performance)
 
 FrameStart = 0 #//Starting Frame of the Video
-VideoStreaming = False#//Self explanatory,
+VideoStreaming = True#//Self explanatory,
 VideoPath = r"https://github.com/jojogamezHub/RobloxScreenShare/raw/main/video.mp4"
 ####Settings####
 
