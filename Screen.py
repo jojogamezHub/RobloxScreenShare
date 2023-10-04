@@ -11,7 +11,7 @@ FPS = 1*8 #//Max FPS is FrameGroups * 8, due to max Roblox HTTP limit/or... we c
 XRes = 16*25#//X resolution of your monitor, currently it is 16*N due to my aspect ratio
 YRes = 9*25#//Y resolution of your monitor, currently it is 9*N due to my aspect ratio
 
-CompressedColors = False #//Whether to compress colors, by removing their color quality
+CompressedColors = True #//Whether to compress colors, by removing their color quality
 FrameGroups = 6 #//Amount of Frames sent in Groups
 
 FrameSkip = 0 #How many times it should send a full frame without compression, (artifacts may appear with the compression, so this clears them up at the cost of performance)
