@@ -2,3 +2,4 @@ Flask
 gevent
 opencv_python
 Pillow
+waitress
