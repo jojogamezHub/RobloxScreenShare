@@ -154,4 +154,3 @@ def index():
 
 if __name__ == "__main__":
     print(str(XRes) + "x" + str(YRes) + "    FPS: " + str(FPS) + "    Port: 80")
-    app.run(host="0.0.0.0", port=80)
