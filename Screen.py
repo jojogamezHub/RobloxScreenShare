@@ -117,8 +117,8 @@ def EncodeFrame(FirstTime, ServerID, SkipFrame):
 @app.route('/', methods=["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "CONNECT", "TRACE"])
 def ReturnFrame():
     Method = request.headers.get("R", "default_value")
-    ServerID = request.headers["I"]
-    SkipFrame = request.headers["F"]
+    ServerID = request.headers.get("I", "default_value")
+    SkipFrame = request.headers.get("F", "default_value")
 
     if not ServerID in ServerList:
         ServerList[ServerID] = FrameStart
