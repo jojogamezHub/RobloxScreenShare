@@ -1,4 +1,4 @@
-ffrom flask import Flask, jsonify, request, Response
+from flask import Flask, jsonify, request, Response
 from PIL import Image, ImageGrab
 import time
 import cv2
@@ -15,7 +15,7 @@ FrameSkip = 0  # How many times it should send a full frame without compression 
 
 FrameStart = 1  # Starting Frame of the Video
 VideoStreaming = True  # Self-explanatory
-VideoPath = r"https://github.com/jojogamezHub/RobloxScreenShare/raw/main/video.mp4"
+VideoPath = r"C:\Users\jojog\Downloads\yt1s.com - Train Vs Giant Pit_144p.mp4"
 ####Settings####
 
 app = Flask(__name__)
