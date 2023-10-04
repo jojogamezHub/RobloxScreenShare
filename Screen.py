@@ -4,6 +4,7 @@ import time
 import cv2
 import os
 from gevent.pywsgi import WSGIServer
+from waitress import serve
 
 ####Settings####
 FPS = 1*8 #//Max FPS is FrameGroups * 8, due to max Roblox HTTP limit/or... we can change the fps to either half of the frame groups or double of the framegroups
@@ -149,8 +150,4 @@ def ReturnFrame():
 
     return jsonify(Fr=Frames, F=FPS, X=XRes, Y=YRes, G=FrameGroups)
 
-def index(): 
-    return "Homepage of GeeksForGeeks"
-
-if __name__ == '__main__':
-    app.run()
+serve(app, port=8080)
