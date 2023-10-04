@@ -141,11 +141,14 @@ def ReturnFrame():
     # Update the frame count for the next request
     ServerList[ServerID] = end_frame
 
+    # Construct the URL for the client receiver
+    url = f"https://{os.environ['RENDER_EXTERNAL_HOST']}/"
+
+    # Print the URL to the console
+    print("Client Receiver URL:", url)
+
     return jsonify(Fr=Frames, F=FPS, X=XRes, Y=YRes, G=FrameGroups)
 
-def StartApi(Port):
-    print(str(XRes) + "x" + str(YRes) + "    FPS: " + str(FPS)  + "    Port: " + str(Port))
-    Server = WSGIServer(('0.0.0.0', Port), app)
-    Server.serve_forever()
-
-StartApi(1241)
+if __name__ == "__main__":
+    print(str(XRes) + "x" + str(YRes) + "    FPS: " + str(FPS) + "    Port: 80")
+    app.run(host="0.0.0.0", port=80)
