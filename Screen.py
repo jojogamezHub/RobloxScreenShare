@@ -15,7 +15,7 @@ FrameSkip = 0  # How many times it should send a full frame without compression 
 
 FrameStart = 1  # Starting Frame of the Video
 VideoStreaming = True  # Self-explanatory
-VideoPath = r"C:\Users\jojog\Downloads\yt1s.com - Train Vs Giant Pit_144p.mp4"
+VideoPath = r"https://raw.githubusercontent.com/jojogamezHub/RobloxScreenShare/main/video.mp4"
 ####Settings####
 
 app = Flask(__name__)
