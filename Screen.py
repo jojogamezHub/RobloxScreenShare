@@ -149,5 +149,3 @@ def ReturnFrame():
     print("Client Receiver URL:", url)
 
     return jsonify(Fr=Frames, F=FPS, X=XRes, Y=YRes, G=FrameGroups)
-
-serve(app, port=8080)
