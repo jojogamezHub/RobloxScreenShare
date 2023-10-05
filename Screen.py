@@ -17,7 +17,7 @@ FrameSkip = 0  #How many times it should send a full frame without compression, 
 
 FrameStart = 1  #//Starting Frame of the Video
 VideoStreaming = True  #//Self explanatory,
-VideoPath = r"video.mp4"
+VideoPath = r"https://github.com/jojogamezHub/RobloxScreenShare/raw/main/video.mp4"
 ####Settings####
 
 app = Flask(__name__)
