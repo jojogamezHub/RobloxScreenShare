@@ -154,7 +154,3 @@ def generate_frames():
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
         elapsed_time = time.time() - start_time
         time.sleep(max(0, 1 / FPS - elapsed_time))
-
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
