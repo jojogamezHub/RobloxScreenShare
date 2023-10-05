@@ -1,36 +1,40 @@
-from flask import Flask, jsonify, request, Response
+from flask import Flask, jsonify, request
 from PIL import Image, ImageGrab
+import random, string
 import time
 import cv2
+from gevent.pywsgi import WSGIServer
 
 ####Settings####
-FPS = 1 * 8  # Max FPS is FrameGroups * 8, due to max Roblox HTTP limit/or... we can change the fps to either half of the frame groups or double of the framegroups
-XRes = 9 * 15  # X resolution of your monitor, currently it is 16*N due to my aspect ratio
-YRes = 5 * 15  # Y resolution of your monitor, currently it is 9*N due to my aspect ratio
+FPS = 1 * 8  #//Max FPS is FrameGroups * 8, due to max Roblox HTTP limit/or... we can change the fps to either half of the frame groups or double of the framegroups
+XRes = 9 * 15  #//X resolution of your monitor, currently it is 16*N due to my aspect ratio
+YRes = 5 * 15  #//Y resolution of your monitor, currently it is 9*N due to my aspect ratio
 
-CompressedColors = True  # Whether to compress colors, by removing their color quality
-FrameGroups = 6  # Amount of Frames sent in Groups
+CompressedColors = True  #//Whether to compress colors, by removing their color quality
+FrameGroups = 6  #//Amount of Frames sent in Groups
 
-FrameSkip = 0  # How many times it should send a full frame without compression (artifacts may appear with the compression, so this clears them up at the cost of performance)
+FrameSkip = 0  #How many times it should send a full frame without compression, (artifacts may appear with the compression, so this clears them up at the cost of performance)
 
-FrameStart = 1  # Starting Frame of the Video
-VideoStreaming = True  # Self-explanatory
-VideoPath = r"https://raw.githubusercontent.com/jojogamezHub/RobloxScreenShare/main/video.mp4"
+FrameStart = 1  #//Starting Frame of the Video
+VideoStreaming = True  #//Self explanatory,
+VideoPath = r"video.mp4"
 ####Settings####
 
 app = Flask(__name__)
 
-LastFrame = []  # Keeps track of the last frame, to apply compressions (doesn't send pixels that didn't change since the last frame)
-FrameCount = 0  # Keeps track of the frame count, for refreshing frames with FrameSkip
+LastFrame = [
+]  #Keeps track of the last frame, to apply compressions (doesnt send pixels that didnt change since the last frame)
+FrameCount = 0  #Keeps track of the frame count, for refreshing frames with FrameSkip
 
-ServerList = {}  # List of the servers it's tracking, so that servers can watch their own films without interrupting each other
+ServerList = {
+}  #List of the servers its tracking, so that servers can watch their own films without interrupting each other
 
 cap = cv2.VideoCapture(VideoPath)
 cap.set(cv2.CAP_PROP_POS_FRAMES, FrameStart)
 
 
 def RGBToCompHex(rgb):
-    return f"{(rgb[0] >> 4):X}{(rgb[1] >> 4):X}{(rgb[2] >> 4):X}"
+    return f"{(rgb[0] >> 4):X}{(rgb[1]  >> 4):X}{(rgb[2] >> 4):X}"
 
 
 def EncodeFrame(FirstTime, ServerID, SkipFrame):
@@ -38,10 +42,10 @@ def EncodeFrame(FirstTime, ServerID, SkipFrame):
 
     if VideoStreaming and SkipFrame == "1":
         ServerList[ServerID] += 1
-        cap.set(cv2.CAP_PROP_POS_FRAMES, ServerList[ServerID]);
+        cap.set(cv2.CAP_PROP_POS_FRAMES, ServerList[ServerID])
 
     if FirstTime == "1":
-        # Refresh the client's screen (doesn't compress it)
+        #Refresh the clients screen (doesnt compress it)
         LastFrame = []
 
     lastpixel = ""
@@ -56,26 +60,26 @@ def EncodeFrame(FirstTime, ServerID, SkipFrame):
     else:
         playing, frame = cap.read()
         if not playing:
-            # video ended, go back to frame 0 to repeat the video
+            #video ended, go back to frame 0 to repeat the video
             cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
             ServerList[ServerID] = 0
             _, frame = cap.read()
 
-        pic = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)).resize((XRes, YRes),
-                                                                            Image.Resampling.BILINEAR)
+        pic = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)).resize(
+            (XRes, YRes), Image.Resampling.BILINEAR)
 
     if CompressedColors:
         CurrentFrame = [RGBToCompHex(pixel) for pixel in pic.getdata()]
     else:
         CurrentFrame = ["%02x%02x%02x" % pixel for pixel in pic.getdata()]
 
-    # removes duplicates
+    #removes duplicates
     LastFrame2 = [*CurrentFrame]
 
     FrameLen = len(LastFrame)
 
     for i, v in enumerate(CurrentFrame):
-        # Removes non-changed colors
+        #Removes non changed colors
         if FrameLen > i and v == LastFrame[i]:
             if WasDuplicate:
                 DuplicateNumber += 1
@@ -90,7 +94,7 @@ def EncodeFrame(FirstTime, ServerID, SkipFrame):
         else:
             WasDuplicate = False
 
-        # Removes color repetition
+        #Removes color repetition
         if lastpixel == v:
             if WasRepetitive:
                 number += 1
@@ -114,11 +118,15 @@ def EncodeFrame(FirstTime, ServerID, SkipFrame):
     return tuple(filter(None, CurrentFrame))
 
 
-@app.route('/', methods=["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "CONNECT", "TRACE"])
+@app.route('/',
+           methods=[
+               "GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS",
+               "CONNECT", "TRACE"
+           ])
 def ReturnFrame():
-    Method = request.headers.get("R", "default_value")
-    ServerID = request.headers.get("I", "default_value")
-    SkipFrame = request.headers.get("F", "default_value")
+    Method = request.headers.get("R")
+    ServerID = request.headers.get("I")
+    SkipFrame = request.headers.get("F")
 
     if not ServerID in ServerList:
         ServerList[ServerID] = FrameStart
@@ -141,16 +149,12 @@ def ReturnFrame():
     return jsonify(Fr=Frames, F=FPS, X=XRes, Y=YRes, G=FrameGroups)
 
 
-@app.route('/video', methods=["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "CONNECT", "TRACE"])
-def video():
-    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+def StartApi(Port):
+    print(
+        str(XRes) + "x" + str(YRes) + "    FPS: " + str(FPS) + "    Port: " +
+        str(Port))
+    Server = WSGIServer(('0.0.0.0', Port), app)
+    Server.serve_forever()
 
 
-def generate_frames():
-    while True:
-        start_time = time.time()
-        frame = EncodeFrame("1", "1", "0")
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-        elapsed_time = time.time() - start_time
-        time.sleep(max(0, 1 / FPS - elapsed_time))
+StartApi(random.randint(1, 100000))
