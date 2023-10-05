@@ -157,4 +157,4 @@ def StartApi(Port):
     Server.serve_forever()
 
 
-StartApi(random.randint(1, 100000))
+StartApi(1000) #use random.randint(1, 100000) if its hosted on replit.com
