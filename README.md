@@ -54,13 +54,13 @@ pip install -r requirements.txt
 
 
 ## Notes
--
+- There are 2 versions of the server code, one that works on your local PC (if you do not want to publish the game to the public) and another that is compatible with webservers (Which allow you to access the data on any server, anywhere).
 
-- I apologize if this is not properly documentated, since the original meaning behind making this was not to publicize it.
+- However the Webserver-compatible code is tailored specifically for replit, meaning you will have to modify the code to be able to work on any other webserver service.
 
-- I am by no way a great python programmer, so I once again apologize for the sloppy documentation and code
+- So far, the code is able to handle the provided video with somewhat smooth playback (There are still times where the playback will stop shortly (for like half a second), this is due to the http request taking longer than usual.
 
-- Nonetheless I hope you enjoy it and I would especially love if you would even share your work with this and maybe even contribute to it ;)
+ - A little advice for you dear reader, This might sound too technical for u, but either way if you plan on using this github project, that would be a bit redundant. However, the more efficient your video codec is at decoding and encoding, the faster and lighter the overall process that the webserver (or local server) has to go through to send data to your roblox server. I do not whole-heartedly recommend you to use HEVC for your videos due to limited support (As you will risk having problems with whatever server your using). Any video codec that is more efficient than the standard H.264 will definetly lead to a performance increase no matter what.
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
