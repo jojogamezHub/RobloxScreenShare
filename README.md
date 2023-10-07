@@ -58,7 +58,7 @@ pip install -r requirements.txt
 
 - However the Webserver-compatible code is tailored specifically for replit, meaning you will have to modify the code to be able to work on any other webserver service.
 
-- So far, the code is able to handle the provided video with somewhat smooth playback (There are still times where the playback will stop shortly (for like half a second), this is due to the http request taking longer than usual.
+- So far, the code is able to handle the provided video with somewhat smooth playback, There are still times where the playback will stop shortly (for like half a second or less, its not too detrimental luckily), this is due to the http request taking longer than usual.
 
  - A little advice for you dear reader, This might sound too technical for u, but either way if you plan on using this github project, that would be a bit redundant. However, the more efficient your video codec is at decoding and encoding, the faster and lighter the overall process that the webserver (or local server) has to go through to send data to your roblox server. I do not whole-heartedly recommend you to use HEVC for your videos due to limited support (As you will risk having problems with whatever server your using). Any video codec that is more efficient than the standard H.264 will definetly lead to a performance increase no matter what.
 ## License
