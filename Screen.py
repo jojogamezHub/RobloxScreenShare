@@ -149,4 +149,4 @@ def start_api(port):
     server = WSGIServer(('0.0.0.0', port), app)
     server.serve_forever()
 
-start_api(random.randint(1, 65535))
+start_api(random.randint(1, 8080))
